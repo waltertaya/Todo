@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App - Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 30px;
+        }
+        .buttons a {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #ffffff;
+            margin: 5px;
+        }
+        .signup-btn {
+            background-color: #4CAF50;
+        }
+        .login-btn {
+            background-color: #007BFF;
+        }
+        .signup-btn:hover {
+            background-color: #45a049;
+        }
+        .login-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome to ToDo App</h1>
+        <p>Organize your tasks efficiently and boost your productivity. Sign up to get started or log in to access your tasks.</p>
+        <div class="buttons">
+            <a href="/register" class="signup-btn">Sign Up</a>
+            <a href="/login" class="login-btn">Log In</a>
+        </div>
+    </div>
+
+</body>
+</html>

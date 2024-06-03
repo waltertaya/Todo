@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App - Manage Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .form-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .task-name {
+            flex: 1;
+        }
+        .task-actions button {
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .task-actions .edit-btn {
+            background-color: #007BFF;
+            color: #ffffff;
+        }
+        .task-actions .delete-btn {
+            background-color: #FF4136;
+            color: #ffffff;
+        }
+        .task-actions .edit-btn:hover {
+            background-color: #0056b3;
+        }
+        .task-actions .delete-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>My ToDo List</h1>
+        <div class="form-group">
+            <input type="text" id="new-task" placeholder="Add a new task">
+            <button onclick="addTask()">Add</button>
+        </div>
+        <ul id="task-list">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('new-task');
+            const taskList = document.getElementById('task-list');
+            const taskName = taskInput.value.trim();
+            
+            if (taskName) {
+                const li = document.createElement('li');
+                
+                const taskNameSpan = document.createElement('span');
+                taskNameSpan.className = 'task-name';
+                taskNameSpan.textContent = taskName;
+                
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'task-actions';
+                
+                const editButton = document.createElement('button');
+                editButton.className = 'edit-btn';
+                editButton.textContent = 'Edit';
+                editButton.onclick = () => editTask(li, taskNameSpan);
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-btn';
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteTask(li);
+                
+                actionsDiv.appendChild(editButton);
+                actionsDiv.appendChild(deleteButton);
+                
+                li.appendChild(taskNameSpan);
+                li.appendChild(actionsDiv);
+                
+                taskList.appendChild(li);
+                
+                taskInput.value = '';
+            }
+        }
+        
+        function editTask(taskElement, taskNameElement) {
+            const newTaskName = prompt('Edit task:', taskNameElement.textContent);
+            if (newTaskName !== null) {
+                taskNameElement.textContent = newTaskName.trim();
+            }
+        }
+        
+        function deleteTask(taskElement) {
+            if (confirm('Are you sure you want to delete this task?')) {
+                taskElement.remove();
+            }
+        }
+    </script>
+
+</body>
+</html>
