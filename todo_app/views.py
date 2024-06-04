@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login , logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from .models import Task
@@ -11,6 +12,8 @@ def index(request):
     return render(request, 'todo_app/landing.html')
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
 
     if request.method == 'POST':
         username = request.POST.get('userName')
@@ -40,6 +43,8 @@ def register(request):
 
 
 def user_login(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == 'POST':
         username = request.POST.get('userName')
         password = request.POST.get('password')
@@ -54,6 +59,7 @@ def user_login(request):
             return redirect('login')
     return render(request, 'todo_app/login.html')   
 
+@login_required
 def home(request):
     if request.method == 'POST':
         task = request.POST.get('task')
@@ -68,11 +74,13 @@ def home(request):
     return render(request, 'todo_app/home.html', context)
     
 
+@login_required
 def delete_task(request, name):
     task = Task.objects.get(user = request.user, title=name)
     task.delete()
     return redirect('home')
 
+@login_required
 def complete_task(request, name):
     task = Task.objects.get(user = request.user, title=name)
     task.complete = True
@@ -80,6 +88,7 @@ def complete_task(request, name):
     return redirect('home')
 
 
+@login_required
 def user_logout(request):
     logout(request)
     messages.success(request, 'You are now logged out')
