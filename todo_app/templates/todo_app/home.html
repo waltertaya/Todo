@@ -54,46 +54,11 @@
         list-style: none;
         padding: 0;
       }
-      li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        margin-bottom: 10px;
-      }
-      .task-name {
-        flex: 1;
-      }
-      .task-actions button {
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 5px;
-      }
-      .task-actions .edit-btn {
-        background-color: #007bff;
-        color: #ffffff;
-      }
-      .task-actions .delete-btn {
-        background-color: #ff4136;
-        color: #ffffff;
-      }
-      .task-actions .edit-btn:hover {
-        background-color: #0056b3;
-      }
-      .task-actions .delete-btn:hover {
-        background-color: #c0392b;
-      }
-
       .userHeader {
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
-
       .userHeader button {
         background-color: #ff4136;
         color: #ffffff;
@@ -101,6 +66,40 @@
         padding: 10px 20px;
         border-radius: 4px;
         cursor: pointer;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      table th,
+      table td {
+        padding: 10px;
+        text-align: left;
+      }
+      table th {
+        background-color: #f8f8f8;
+      }
+      .task-actions {
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+      .completed_btn {
+        background-color: #007bff;
+        color: #ffffff;
+      }
+      .delete-btn {
+        background-color: #ff4136;
+        color: #ffffff;
+      }
+      .completed_btn:hover {
+        background-color: #0056b3;
+      }
+      .delete-btn:hover {
+        background-color: firebrick;
       }
     </style>
   </head>
@@ -116,16 +115,54 @@
 
       <form action="" method="post">
         {% csrf_token %}
-      <div class="form-group">
-        <input type="text" id="new-task" placeholder="Add a new task" name="task"/>
-        <button onclick="addTask()">Add</button>
-      </div>
+        <div class="form-group">
+          <input
+            type="text"
+            id="new-task"
+            placeholder="Add a new task"
+            name="task"
+          />
+          <button onclick="addTask()">Add</button>
+        </div>
       </form>
-      <ul id="task-list">
-        <!-- Tasks will be dynamically added here -->
-      </ul>
+      <table id="tasks">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks%}
+          <tr>
+            <td>{{ task.title }}</td>
+            <td>
+              {% if task.complete %}
+              <span style="color: green">Completed</span>
+              {% else %}
+              <span style="color: red">Pending</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'complete_task' task.title%}">
+                <button class="task-actions completed_btn">
+                  {% if task.complete %} inProgress {% else %} Done {% endif %}
+                </button></a
+              >
+              <a href=" {% url 'delete_task' task.title%}">
+                <button
+                  class="task-actions delete-btn"
+                  onclick="deleteTask({{ task.id }})"
+                >
+                  Delete
+                </button></a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-
-  
   </body>
 </html>

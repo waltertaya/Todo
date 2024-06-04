@@ -61,11 +61,24 @@ def home(request):
         if task:
             task = Task(user=request.user, title=task)
             task.save()
-            messages.success(request, 'Task added successfully')
 
-        else:
-            messages.error(request, 'Task cannot be empty')
-    return render(request, 'todo_app/home.html')
+    
+    tasks = Task.objects.filter(user=request.user)
+    context = {'tasks': tasks}
+    return render(request, 'todo_app/home.html', context)
+    
+
+def delete_task(request, name):
+    task = Task.objects.get(user = request.user, title=name)
+    task.delete()
+    return redirect('home')
+
+def complete_task(request, name):
+    task = Task.objects.get(user = request.user, title=name)
+    task.complete = True
+    task.save()
+    return redirect('home')
+
 
 def user_logout(request):
     logout(request)
