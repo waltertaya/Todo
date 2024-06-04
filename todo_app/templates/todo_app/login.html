@@ -66,6 +66,14 @@
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required />
         </div>
+
+        {% if messages %}
+        <div class="form-group">
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        </div>
+       {% endif %}
         <div class="form-group">
           <button type="submit">Login</button>
         </div>

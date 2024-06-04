@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login , logout
 from django.contrib import messages
 from django.http import HttpResponse
+from .models import Task
 
 
 
@@ -47,7 +48,6 @@ def user_login(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, 'You are now logged in')
             return redirect('home')
         else:
             messages.error(request, 'Invalid credentials')
@@ -55,6 +55,21 @@ def user_login(request):
     return render(request, 'todo_app/login.html')   
 
 def home(request):
+    if request.method == 'POST':
+        task = request.POST.get('task')
+
+        if task:
+            task = Task(user=request.user, title=task)
+            task.save()
+            messages.success(request, 'Task added successfully')
+
+        else:
+            messages.error(request, 'Task cannot be empty')
     return render(request, 'todo_app/home.html')
+
+def user_logout(request):
+    logout(request)
+    messages.success(request, 'You are now logged out')
+    return redirect('login')
 
 # Create your views here.
