@@ -25,13 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY',default='django-insecure-4^f@ah1*)0uelx)py&h%py3n-hn1_8l(s!rl9zldv()ir3=@ce')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+DEBUG = os.environ.get('DEBUG', False).lower() == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
-RENDER_EXTERNAL_HOST = os.environ.get('RENDER_EXTERNAL_HOST', default='localhost')
-if RENDER_EXTERNAL_HOST:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOST)
+
 
 
 
@@ -85,6 +83,9 @@ DATABASES = {
     'default': dj_database_url.config(default='postgresql://tododj_user:X6DJwlw0kFCX9sMmQiZeFKHIOOzQ4YRW@localhost:5432/tododj',
      conn_max_age=600)
 }
+database_url = os.environ.get('DATABASE_URL')
+
+DATABASES['default']= dj_database_url.parse(database_url, conn_max_age=600)
 
 
 # Password validation
@@ -122,10 +123,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
