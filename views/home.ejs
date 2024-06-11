@@ -108,13 +108,12 @@
       <h1>My ToDo List</h1>
       <div class="userHeader">
         <h4>Hi, {{ user.username }}</h4>
-        <a href="{% url 'logout' %}">
+        <a href="/logout">
           <button class="logout">LogOut</button>
         </a>
       </div>
 
       <form action="" method="post">
-        {% csrf_token %}
         <div class="form-group">
           <input
             type="text"
@@ -134,33 +133,34 @@
           </tr>
         </thead>
         <tbody>
-          {% for task in tasks%}
-          <tr>
-            <td>{{ task.title }}</td>
-            <td>
-              {% if task.complete %}
-              <span style="color: green">Completed</span>
-              {% else %}
-              <span style="color: red">Pending</span>
-              {% endif %}
-            </td>
-            <td>
-              <a href="{% url 'complete_task' task.title%}">
-                <button class="task-actions completed_btn">
-                  {% if task.complete %} inProgress {% else %} Done {% endif %}
-                </button></a
-              >
-              <a href=" {% url 'delete_task' task.title%}">
-                <button
-                  class="task-actions delete-btn"
-                  onclick="deleteTask({{ task.id }})"
-                >
-                  Delete
-                </button></a
-              >
-            </td>
-          </tr>
-          {% endfor %}
+          <% for (let index = 0; index < tasks.length; index++) { %>
+            <tr>
+              <td><%= tasks[index].title %></td>
+              <td>
+                <% if (tasks[index].complete) { %>
+                  <span style="color: green">Completed</span>
+                <% } else { %>
+                  <span style="color: red">Pending</span>
+                <% } %>
+              </td>
+              <td>
+                <a href="/complete_task/<%= tasks[index].title %>">
+                  <button class="task-actions completed_btn">
+                    <% if (tasks[index].complete) { %> inProgress <% } else { %> Done <% } %>
+                  </button>
+                </a>
+                <a href="/delete_task/<%= tasks[index].title %>">
+                  <button
+                    class="task-actions delete-btn"
+                    onclick="deleteTask(<%= tasks[index].id %>)"
+                  >
+                    Delete
+                  </button>
+                </a>
+              </td>
+            </tr>
+          <% } %>
+          
         </tbody>
       </table>
     </div>
