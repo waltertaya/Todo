@@ -1,8 +1,23 @@
-const { Schema, Model } = require('mongoose');
+const { Schema, model } = require('mongoose');
+const { boolean } = require('webidl-conversions');
 
+const tasksSchema = new Schema({
+    userId: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    complete: {
+        type: String,
+        required: true
+    },
+    created: {
+        type: String,
+        default: new Date().toDateString()
+    }
+})
 
-// class Task(models.Model):
-//     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-//     title = models.CharField(max_length=200)
-//     complete = models.BooleanField(default=False)
-//     created = models.DateTimeField(auto_now_add=True)
+module.exports = model('Tasks', tasksSchema)
