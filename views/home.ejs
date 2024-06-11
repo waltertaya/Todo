@@ -24,7 +24,7 @@
             placeholder="Add a new task"
             name="task"
           />
-          <button onclick="addTask()">Add</button>
+          <button>Add</button>
         </div>
       </form>
       <table id="tasks">
@@ -40,22 +40,21 @@
             <tr>
               <td><%= tasks[index].title %></td>
               <td>
-                <% if (tasks[index].complete) { %>
+                <% if (tasks[index].complete === 'true') { %>
                   <span style="color: green">Completed</span>
                 <% } else { %>
                   <span style="color: red">Pending</span>
                 <% } %>
               </td>
               <td>
-                <a href="/complete_task/<%= tasks[index].title %>">
+                <a href="/complete_task/<%= tasks[index].id %>">
                   <button class="task-actions completed_btn">
-                    <% if (tasks[index].complete) { %> inProgress <% } else { %> Done <% } %>
+                    <% if (tasks[index].complete === 'false') { %> inProgress <% } else { %> Done <% } %>
                   </button>
                 </a>
-                <a href="/delete_task/<%= tasks[index].title %>">
+                <a href="/delete_task/<%= tasks[index].id %>">
                   <button
                     class="task-actions delete-btn"
-                    onclick="deleteTask(<%= tasks[index].id %>)"
                   >
                     Delete
                   </button>
@@ -67,5 +66,6 @@
         </tbody>
       </table>
     </div>
+    <script src="js/scripts.js"></script>
   </body>
 </html>

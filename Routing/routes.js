@@ -13,9 +13,11 @@ router.post('/login', async (req, res) => {
     const found = await User.findOne({username: userName})
     if (found) {
         const match = await comparePassword(password, found.password)
-        console.log(match)
+        // console.log(match)
         if (match) {
             req.session.current_user = found;
+            // console.log(found.id)
+            req.session.userId = found.id;
             res.redirect('/')
         } else {
             res.redirect('/landing')
@@ -55,17 +57,63 @@ router.get('/landing', (req, res) => {
     res.render('landing')
 });
 
-// router.use((req, res, next) => {
-//     if (req.session.found) {
-//         next()
-//     } else {
-//         res.redirect('/landing')
-//     }
-// })
+router.use((req, res, next) => {
+    if (req.session.current_user) {
+        next()
+    } else {
+        res.redirect('/landing')
+    }
+})
 
-router.get('/', (req, res) => {
-    tasks = {}
+router.get('/', async (req, res) => {
+    const userId = req.session.userId;
+    // console.log(userId)
+    const tasks = await Tasks.find({ userId: userId })
+    // const map = {
+    //     'true': true,
+    //     'false': false
+    // }
     res.render('home', { tasks: tasks, user: req.session.current_user})
+});
+
+router.post('/', async (req, res) => {
+    const title = req.body.task;
+    // console.log(req.session.userId)
+    const userId = req.session.userId;
+    const complete = 'false';
+    // console.log(title, userId, complete)
+    if (title === '') {
+        res.redirect('/');
+    } else {
+        const newTask = new Tasks({ userId, title, complete });
+        await newTask.save()
+        res.redirect('/')
+    }
+})
+
+router.get('/complete_task/:id', async (req, res) => {
+    const taskId = req.params.id;
+        const task = await Tasks.findOne({ _id: taskId });
+
+        if (task.complete === 'false') {
+            task.complete = 'true';
+            await task.save();
+    
+            res.redirect('/');
+        } else {
+            task.complete = 'false'
+            await task.save();
+    
+            res.redirect('/');
+        }
+});
+
+router.get('/delete_task/:id', async (req, res) => {
+    const taskId = req.params.id;
+
+    const task = await Tasks.findOneAndDelete({ _id: taskId });
+
+    res.redirect('/');
 });
 
 
